@@ -1,31 +1,38 @@
 package server
 
 import (
-	tea "github.com/charmbracelet/bubbletea"
+	"context"
+	"log"
+
+	"github.com/charmbracelet/wish"
+	bt "github.com/charmbracelet/wish/bubbletea"
+
 	"github.com/mamuzad/large-tty/internal/tui"
 )
 
-func Start() error {
-	// port := os.Getenv("PORT")
-	// if port == "" {
-	// 	port = "2222"
-	// }
-	//
-	// s, err := wish.NewServer(
-	// 	wish.WithAddress(":"+port),
-	// 	wish.WithHostKeyPath(".wish_hostkey"),
-	// 	wish.WithMiddleware(),
-	// )
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
-	//
-	// log.Printf("listening on :%s\n", port)
-	// log.Fatal(s.ListenAndServe())
+func Start(ctx context.Context) error {
+	s, err := wish.NewServer(
+		wish.WithAddress(":2222"),
+		wish.WithHostKeyPath(".ssh/id_ed25519"),
+		wish.WithMiddleware(
+			bt.Middleware(tui.BubbleTeaHandler),
+		),
+	)
+	if err != nil {
+		return err
+	}
 
-	// Local render (no SSH) for now:
-	m, opts := tui.BubbleTeaHandler(nil)
-	p := tea.NewProgram(m, opts...)
-	_, err := p.Run()
-	return err
+	done := make(chan error, 1)
+	go func() {
+		log.Printf("SSH server listening on %s", s.Addr)
+		done <- s.ListenAndServe()
+	}()
+
+	select {
+	case err := <-done:
+		return err
+	case <-ctx.Done():
+		log.Println("Shutting down server...")
+		return s.Close()
+	}
 }
