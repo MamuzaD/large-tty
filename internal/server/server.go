@@ -1,11 +1,11 @@
-package main
+package server
 
 import (
-	"fmt"
-	"os"
+	tea "github.com/charmbracelet/bubbletea"
+	"github.com/mamuzad/large-tty/internal/tui"
 )
 
-func main() {
+func Start() error {
 	// port := os.Getenv("PORT")
 	// if port == "" {
 	// 	port = "2222"
@@ -23,8 +23,9 @@ func main() {
 	// log.Printf("listening on :%s\n", port)
 	// log.Fatal(s.ListenAndServe())
 
-	if err := RunBubbleTea(nil); err != nil {
-		fmt.Printf("Error: %v\n", err)
-		os.Exit(1)
-	}
+	// Local render (no SSH) for now:
+	m, opts := tui.BubbleTeaHandler(nil)
+	p := tea.NewProgram(m, opts...)
+	_, err := p.Run()
+	return err
 }

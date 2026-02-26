@@ -1,4 +1,4 @@
-package main
+package tui
 
 // string array of fonts, not sure if this is needed
 func LoadFonts() []string {
