@@ -6,10 +6,10 @@ however this app will be served over ssh, so anyone can simply do
 
 ## tech stack
 
-language: go
-framework: charm bubbletea
-ssh: charm wish ?
-hosting: railway ? or some vps
+- language: go
+- framework: charm bubbletea
+- ssh: charm wish ?
+- hosting: railway ? or some vps
 
 ## ui
 
