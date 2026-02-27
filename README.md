@@ -12,6 +12,8 @@ Inspired by [large-type.com](https://large-type.com), but built for the terminal
 
 ## Demo
 
+https://github.com/user-attachments/assets/115bb2b4-9178-444d-9f80-8819ffc072aa
+
 ### Built With
 
 ![Go Badge](https://img.shields.io/badge/Go-00ADD8?logo=go&logoColor=fff&style=for-the-badge)
