@@ -118,6 +118,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 func (m Model) View() string {
 	width := m.width
+	height := m.height
 
 	center := func(s string) string {
 		return lipgloss.PlaceHorizontal(width, lipgloss.Center, s)
@@ -125,7 +126,7 @@ func (m Model) View() string {
 
 	// header
 	header := center(titleStyle.Render("large-tty"))
-	helpBar := center(m.help.View(keys))
+
 	// calculate remaining chars for color feedback
 	used := len(m.ti.Value())
 	remaining := m.ti.CharLimit - used
@@ -143,6 +144,16 @@ func (m Model) View() string {
 
 	figRendered := center(figStyle.Render(fig))
 
+	// compose top bit
+	topContent := lipgloss.JoinVertical(
+		lipgloss.Center,
+		header,
+		"",
+		inputBox,
+		"",
+		figRendered,
+	)
+
 	// font label
 	label := fmt.Sprintf("font: %s", selectedFont)
 	if usedFont != selectedFont {
@@ -150,25 +161,22 @@ func (m Model) View() string {
 	}
 	label += fmt.Sprintf("  (%d/%d)", m.fontIdx+1, len(m.fonts))
 	fontLabel := center(fontLabelStyle.Render(label))
+	helpBar := center(m.help.View(keys))
 
-	// compose
-	content := lipgloss.JoinVertical(
+	// compose bottom bit
+	bottomContent := lipgloss.JoinVertical(
 		lipgloss.Center,
-		header,
-		"",
-		inputBox,
-		"",
-		figRendered,
-		"",
 		fontLabel,
 		"",
 		helpBar,
 	)
 
-	return lipgloss.Place(
-		width, m.height,
-		lipgloss.Center, lipgloss.Center,
-		content,
+	// compose
+	topHeight := height - lipgloss.Height(bottomContent)
+	return lipgloss.JoinVertical(
+		lipgloss.Left,
+		lipgloss.Place(width, topHeight, lipgloss.Center, lipgloss.Center, topContent),
+		bottomContent,
 	)
 }
 
