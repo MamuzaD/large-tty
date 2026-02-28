@@ -29,7 +29,7 @@ func clamp(v, lo, hi int) int {
 // The first font in the slice that can render the text in ≤ maxLines wins.
 var fontTiers = []string{"big", "standard", "small", "mini", "term"}
 
-const maxFigLines = 3
+const maxFigLines = 5
 
 // wrapFiglet splits text into words and greedily packs them into up to
 // maxLines FIGlet "rows" (each row is itself multiple terminal lines).

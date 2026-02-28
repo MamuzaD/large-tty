@@ -144,16 +144,6 @@ func (m Model) View() string {
 
 	figRendered := center(figStyle.Render(fig))
 
-	// compose top bit
-	topContent := lipgloss.JoinVertical(
-		lipgloss.Center,
-		header,
-		"",
-		inputBox,
-		"",
-		figRendered,
-	)
-
 	// font label
 	label := fmt.Sprintf("font: %s", selectedFont)
 	if usedFont != selectedFont {
@@ -168,8 +158,17 @@ func (m Model) View() string {
 	fontLabel = center(fontLabel)
 	helpBar := center(m.help.View(keys))
 
-	// compose bottom bit
-	bottomContent := lipgloss.JoinVertical(
+	// fixed top section
+	topFixed := lipgloss.JoinVertical(
+		lipgloss.Center,
+		"",
+		header,
+		"",
+		inputBox,
+	)
+
+	// fixed bottom section
+	bottomFixed := lipgloss.JoinVertical(
 		lipgloss.Center,
 		"",
 		fontLabel,
@@ -177,15 +176,27 @@ func (m Model) View() string {
 		helpBar,
 	)
 
-	// compose
-	topHeight := height - lipgloss.Height(bottomContent)
+	// remaining height becomes the "fig area"
+	figAreaHeight := height - lipgloss.Height(topFixed) - lipgloss.Height(bottomFixed)
+	figAreaHeight = max(0, figAreaHeight)
+
+	// vertically + horizontally center figlet within the fig area
+	figArea := lipgloss.Place(
+		width,
+		figAreaHeight,
+		lipgloss.Center,
+		lipgloss.Center,
+		figRendered,
+	)
+
+	// compose final screen
 	return lipgloss.JoinVertical(
 		lipgloss.Left,
-		lipgloss.Place(width, topHeight, lipgloss.Center, lipgloss.Center, topContent),
-		bottomContent,
+		topFixed,
+		figArea,
+		bottomFixed,
 	)
 }
-
 func (m Model) currentFont() string {
 	if len(m.fonts) == 0 {
 		return ""
