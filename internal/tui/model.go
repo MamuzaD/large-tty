@@ -160,12 +160,18 @@ func (m Model) View() string {
 		label += fmt.Sprintf(" → %s (auto-shrunk)", usedFont)
 	}
 	label += fmt.Sprintf("  (%d/%d)", m.fontIdx+1, len(m.fonts))
-	fontLabel := center(fontLabelStyle.Render(label))
+
+	fontLabel := fontLabelStyle.Render(label)
+	if m.randomPlay {
+		fontLabel += randomPlayStyle.Render(" random play")
+	}
+	fontLabel = center(fontLabel)
 	helpBar := center(m.help.View(keys))
 
 	// compose bottom bit
 	bottomContent := lipgloss.JoinVertical(
 		lipgloss.Center,
+		"",
 		fontLabel,
 		"",
 		helpBar,

@@ -28,6 +28,9 @@ var (
 	fontLabelStyle = lipgloss.NewStyle().
 			Foreground(subtle).
 			Italic(true)
+
+	randomPlayStyle = lipgloss.NewStyle().
+			Foreground(accent)
 )
 
 // inputBoxStyle returns the appropriate style based on remaining chars
