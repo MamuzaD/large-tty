@@ -7,18 +7,31 @@ import (
 // -- keybindings --
 
 type keyMap struct {
-	NextFont key.Binding
-	PrevFont key.Binding
-	Clear    key.Binding
-	Quit     key.Binding
+	NextFont   key.Binding
+	PrevFont   key.Binding
+	RandomFont key.Binding
+	PlayRandom key.Binding
+	Clear      key.Binding
+	Help       key.Binding
+	Quit       key.Binding
 }
 
 func (k keyMap) ShortHelp() []key.Binding {
-	return []key.Binding{k.NextFont, k.PrevFont, k.Clear, k.Quit}
+	return []key.Binding{k.Help, k.Clear, k.Quit}
 }
 
 func (k keyMap) FullHelp() [][]key.Binding {
-	return [][]key.Binding{k.ShortHelp()}
+	return [][]key.Binding{{
+		k.NextFont,
+		k.PrevFont,
+		k.RandomFont,
+		k.PlayRandom,
+	},
+		{
+			k.Help,
+			k.Clear,
+			k.Quit,
+		}}
 }
 
 var keys = keyMap{
@@ -30,6 +43,14 @@ var keys = keyMap{
 		key.WithKeys("shift+tab"),
 		key.WithHelp("shift+tab", "prev font"),
 	),
+	RandomFont: key.NewBinding(
+		key.WithKeys("ctrl+r"),
+		key.WithHelp("ctrl+r", "random font"),
+	),
+	PlayRandom: key.NewBinding(
+		key.WithKeys("alt+r"),
+		key.WithHelp("alt+r", "play random"),
+	),
 	Clear: key.NewBinding(
 		key.WithKeys("enter"),
 		key.WithHelp("enter", "clear"),
@@ -37,5 +58,9 @@ var keys = keyMap{
 	Quit: key.NewBinding(
 		key.WithKeys("ctrl+c", "esc"),
 		key.WithHelp("esc", "quit"),
+	),
+	Help: key.NewBinding(
+		key.WithKeys("alt+?"),
+		key.WithHelp("alt+?", "help"),
 	),
 }

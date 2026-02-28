@@ -2,6 +2,7 @@ package tui
 
 import (
 	"fmt"
+	"math/rand"
 	"strings"
 
 	"github.com/charmbracelet/bubbles/help"
@@ -15,12 +16,13 @@ import (
 // -- model --
 
 type Model struct {
-	width   int
-	height  int
-	ti      textinput.Model
-	help    help.Model
-	fonts   []string
-	fontIdx int
+	width      int
+	height     int
+	ti         textinput.Model
+	help       help.Model
+	fonts      []string
+	fontIdx    int
+	randomPlay bool
 }
 
 func NewModel(sess ssh.Session) Model {
@@ -69,8 +71,19 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.ti.Width = clamp(m.width-10, 20, 60)
 		m.help.Width = m.width
 
+	case randomPlayTickMsg:
+		if m.randomPlay && len(m.fonts) > 0 {
+			m.fontIdx = rand.Intn(len(m.fonts))
+			return m, randomPlayTickCmd()
+		}
+		return m, nil
+
 	case tea.KeyMsg:
 		switch {
+		case key.Matches(msg, keys.Help):
+			m.help.ShowAll = !m.help.ShowAll
+			return m, nil
+
 		case key.Matches(msg, keys.Quit):
 			return m, tea.Quit
 
@@ -78,6 +91,16 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			m.ti.SetValue("")
 			return m, nil
 
+		case key.Matches(msg, keys.RandomFont):
+			m.fontIdx = rand.Intn(len(m.fonts))
+			return m, nil
+		case key.Matches(msg, keys.PlayRandom):
+			m.randomPlay = !m.randomPlay
+			if m.randomPlay {
+				// kick off the loop immediately
+				return m, randomPlayTickCmd()
+			}
+			return m, nil
 		case key.Matches(msg, keys.NextFont):
 			m.fontIdx = (m.fontIdx + 1) % len(m.fonts)
 			return m, nil
@@ -133,13 +156,13 @@ func (m Model) View() string {
 		lipgloss.Center,
 		header,
 		"",
-		helpBar,
-		"",
 		inputBox,
 		"",
 		figRendered,
 		"",
 		fontLabel,
+		"",
+		helpBar,
 	)
 
 	return lipgloss.Place(
