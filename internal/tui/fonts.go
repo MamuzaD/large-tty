@@ -13,7 +13,7 @@ func randomPlayTickCmd() tea.Cmd {
 	})
 }
 
-var Fonts = []string{
+var fonts = []string{
 	"3-d",
 	"3x5",
 	"5lineoblique",
@@ -164,25 +164,21 @@ var Fonts = []string{
 	"weird",
 }
 
-var DefaultFavorites = map[string]bool{
-	"standard": true,
-	"slant":    true,
-	"big":      true,
-	"larry3d":  true,
-	"colossal": true,
-	"doom":     true,
-	"banner3":  true,
-	"block":    true,
-	"shadow":   true,
-	"starwars": true,
-	"speed":    true,
-	"ogre":     true,
-	"small":    true,
-	"smslant":  true,
-	"mini":     true,
-	"term":     true,
+var fontIndexByName = func() map[string]int {
+	m := make(map[string]int, len(fonts))
+	for i, f := range fonts {
+		m[f] = i
+	}
+	return m
+}()
+
+func defaultFontIndex() int {
+	if i, ok := fontIndexByName["standard"]; ok {
+		return i
+	}
+	return 0
 }
 
-func LoadFonts() []string {
-	return Fonts
+func loadFonts() []string {
+	return fonts
 }

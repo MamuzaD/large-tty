@@ -15,17 +15,17 @@ import (
 
 // -- model --
 
-type Model struct {
+type model struct {
 	width      int
 	height     int
-	ti         textinput.Model
+	input      textinput.Model
 	help       help.Model
 	fonts      []string
-	fontIdx    int
+	fontIndex  int
 	randomPlay bool
 }
 
-func NewModel(sess ssh.Session) Model {
+func newModel(sess ssh.Session) model {
 	_ = sess
 
 	ti := textinput.New()
@@ -40,40 +40,34 @@ func NewModel(sess ssh.Session) Model {
 	h.Styles.ShortDesc = lipgloss.NewStyle().Foreground(subtle)
 	h.Styles.ShortSeparator = lipgloss.NewStyle().Foreground(faint)
 
-	fonts := LoadFonts()
-	startIdx := 0
-	for i, f := range fonts {
-		if f == "standard" {
-			startIdx = i
-			break
-		}
-	}
+	fonts := loadFonts()
+	startIndex := defaultFontIndex()
 
-	return Model{
-		width:   80,
-		height:  24,
-		ti:      ti,
-		help:    h,
-		fonts:   fonts,
-		fontIdx: startIdx,
+	return model{
+		width:     80,
+		height:    24,
+		input:     ti,
+		help:      h,
+		fonts:     fonts,
+		fontIndex: startIndex,
 	}
 }
 
-func (m Model) Init() tea.Cmd {
+func (m model) Init() tea.Cmd {
 	return textinput.Blink
 }
 
-func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.WindowSizeMsg:
 		m.width = msg.Width
 		m.height = msg.Height
-		m.ti.Width = clamp(m.width-10, 20, 60)
+		m.input.Width = clamp(m.width-10, 20, 60)
 		m.help.Width = m.width
 
 	case randomPlayTickMsg:
 		if m.randomPlay && len(m.fonts) > 0 {
-			m.fontIdx = rand.Intn(len(m.fonts))
+			m.fontIndex = rand.Intn(len(m.fonts))
 			return m, randomPlayTickCmd()
 		}
 		return m, nil
@@ -88,11 +82,11 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, tea.Quit
 
 		case key.Matches(msg, keys.Clear):
-			m.ti.SetValue("")
+			m.input.SetValue("")
 			return m, nil
 
 		case key.Matches(msg, keys.RandomFont):
-			m.fontIdx = rand.Intn(len(m.fonts))
+			m.fontIndex = rand.Intn(len(m.fonts))
 			return m, nil
 		case key.Matches(msg, keys.PlayRandom):
 			m.randomPlay = !m.randomPlay
@@ -102,21 +96,21 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			}
 			return m, nil
 		case key.Matches(msg, keys.NextFont):
-			m.fontIdx = (m.fontIdx + 1) % len(m.fonts)
+			m.fontIndex = (m.fontIndex + 1) % len(m.fonts)
 			return m, nil
 
 		case key.Matches(msg, keys.PrevFont):
-			m.fontIdx = (m.fontIdx - 1 + len(m.fonts)) % len(m.fonts)
+			m.fontIndex = (m.fontIndex - 1 + len(m.fonts)) % len(m.fonts)
 			return m, nil
 		}
 	}
 
 	var cmd tea.Cmd
-	m.ti, cmd = m.ti.Update(msg)
+	m.input, cmd = m.input.Update(msg)
 	return m, cmd
 }
 
-func (m Model) View() string {
+func (m model) View() string {
 	width := m.width
 	height := m.height
 
@@ -128,12 +122,12 @@ func (m Model) View() string {
 	header := center(titleStyle.Render("large-tty"))
 
 	// calculate remaining chars for color feedback
-	used := len(m.ti.Value())
-	remaining := m.ti.CharLimit - used
-	inputBox := center(inputBoxStyle(remaining).Render(m.ti.View()))
+	used := len(m.input.Value())
+	remaining := m.input.CharLimit - used
+	inputBox := center(inputBoxStyle(remaining).Render(m.input.View()))
 
 	// figlet output
-	raw := strings.TrimSpace(m.ti.Value())
+	raw := strings.TrimSpace(m.input.Value())
 	display := raw
 	if display == "" {
 		display = "large-tty"
@@ -149,7 +143,7 @@ func (m Model) View() string {
 	if usedFont != selectedFont {
 		label += fmt.Sprintf(" → %s (auto-shrunk)", usedFont)
 	}
-	label += fmt.Sprintf("  (%d/%d)", m.fontIdx+1, len(m.fonts))
+	label += fmt.Sprintf("  (%d/%d)", m.fontIndex+1, len(m.fonts))
 
 	fontLabel := fontLabelStyle.Render(label)
 	if m.randomPlay {
@@ -197,15 +191,15 @@ func (m Model) View() string {
 		bottomFixed,
 	)
 }
-func (m Model) currentFont() string {
+func (m model) currentFont() string {
 	if len(m.fonts) == 0 {
 		return ""
 	}
-	return m.fonts[m.fontIdx]
+	return m.fonts[m.fontIndex]
 }
 
 func BubbleTeaHandler(sess ssh.Session) (tea.Model, []tea.ProgramOption) {
-	m := NewModel(sess)
+	m := newModel(sess)
 	return m, []tea.ProgramOption{
 		tea.WithAltScreen(),
 		tea.WithMouseCellMotion(),
