@@ -27,6 +27,10 @@ export type MonoFont = (typeof MONO_FONTS)[number]
 const STORAGE_KEY = 'large-tty-settings'
 const MONO_FONT_STACK =
   "ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace"
+const THEME_COLORS: Record<Theme, string> = {
+  dark: 'rgb(13, 13, 20)',
+  light: 'rgb(250, 250, 250)',
+}
 
 interface Settings {
   theme: Theme
@@ -97,6 +101,11 @@ function applyTheme(theme: Theme) {
   const root = document.documentElement
   root.classList.remove('light', 'dark')
   root.classList.add(theme)
+
+  const themeColor = document.querySelector('meta[name="theme-color"]')
+  if (themeColor) {
+    themeColor.setAttribute('content', THEME_COLORS[theme])
+  }
 }
 
 function applyMonoFont(font: MonoFont) {

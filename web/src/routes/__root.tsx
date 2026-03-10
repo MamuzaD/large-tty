@@ -145,8 +145,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
-        <script src="/theme-init.js" />
         <HeadContent />
+        <script src="/theme-init.js" />
       </head>
       <body className="m-0 overflow-hidden bg-bg text-fg font-mono">
         {children}
