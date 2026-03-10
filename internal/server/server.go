@@ -4,8 +4,8 @@ import (
 	"context"
 	"log"
 
-	"github.com/charmbracelet/wish"
-	bt "github.com/charmbracelet/wish/bubbletea"
+	"charm.land/wish/v2"
+	bt "charm.land/wish/v2/bubbletea"
 
 	"github.com/mamuzad/large-tty/internal/tui"
 )

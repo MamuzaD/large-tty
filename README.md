@@ -18,9 +18,9 @@ https://github.com/user-attachments/assets/115bb2b4-9178-444d-9f80-8819ffc072aa
 
 ![Go Badge](https://img.shields.io/badge/Go-00ADD8?logo=go&logoColor=fff&style=for-the-badge)
 
-- **TUI** - [Charm Bubble Tea](https://github.com/charmbracelet/bubbletea) + [Bubbles](https://github.com/charmbracelet/bubbles)
-- **Styling** - [Lipgloss](https://github.com/charmbracelet/lipgloss)
-- **SSH** - [Charm Wish](https://github.com/charmbracelet/wish)
+- **TUI** - [Charm Bubble Tea](https://charm.land/bubbletea) + [Bubbles](https://charm.land/bubbles)
+- **Styling** - [Lip Gloss](https://charm.land/lipgloss)
+- **SSH** - [Charm Wish](https://charm.land/wish)
 - **Figlet** - [go-figure](https://github.com/common-nighthawk/go-figure)
 
 ## Features

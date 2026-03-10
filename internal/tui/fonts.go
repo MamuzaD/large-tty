@@ -1,8 +1,9 @@
 package tui
 
 import (
-	tea "github.com/charmbracelet/bubbletea"
 	"time"
+
+	tea "charm.land/bubbletea/v2"
 )
 
 type randomPlayTickMsg struct{}

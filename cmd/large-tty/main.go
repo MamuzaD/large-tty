@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	tea "github.com/charmbracelet/bubbletea"
+	tea "charm.land/bubbletea/v2"
 	"github.com/mamuzad/large-tty/internal/tui"
 )
 

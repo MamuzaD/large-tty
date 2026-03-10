@@ -5,11 +5,11 @@ import (
 	"math/rand"
 	"strings"
 
-	"github.com/charmbracelet/bubbles/help"
-	"github.com/charmbracelet/bubbles/key"
-	"github.com/charmbracelet/bubbles/textinput"
-	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
+	"charm.land/bubbles/v2/help"
+	"charm.land/bubbles/v2/key"
+	"charm.land/bubbles/v2/textinput"
+	tea "charm.land/bubbletea/v2"
+	"charm.land/lipgloss/v2"
 	"github.com/charmbracelet/ssh"
 )
 
@@ -33,7 +33,7 @@ func newModel(sess ssh.Session) model {
 	ti.Prompt = "> "
 	ti.Focus()
 	ti.CharLimit = 300
-	ti.Width = 40
+	ti.SetWidth(40)
 
 	h := help.New()
 	h.Styles.ShortKey = lipgloss.NewStyle().Foreground(accent)
@@ -62,8 +62,8 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	case tea.WindowSizeMsg:
 		m.width = msg.Width
 		m.height = msg.Height
-		m.input.Width = clamp(m.width-10, 20, 60)
-		m.help.Width = m.width
+		m.input.SetWidth(clamp(m.width-10, 20, 60))
+		m.help.SetWidth(m.width)
 
 	case randomPlayTickMsg:
 		if m.randomPlay && len(m.fonts) > 0 {
@@ -72,7 +72,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 		return m, nil
 
-	case tea.KeyMsg:
+	case tea.KeyPressMsg:
 		switch {
 		case key.Matches(msg, keys.Help):
 			m.help.ShowAll = !m.help.ShowAll
@@ -110,7 +110,7 @@ func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	return m, cmd
 }
 
-func (m model) View() string {
+func (m model) View() tea.View {
 	width := m.width
 	height := m.height
 
@@ -184,12 +184,17 @@ func (m model) View() string {
 	)
 
 	// compose final screen
-	return lipgloss.JoinVertical(
+	content := lipgloss.JoinVertical(
 		lipgloss.Left,
 		topFixed,
 		figArea,
 		bottomFixed,
 	)
+
+	v := tea.NewView(content)
+	v.AltScreen = true
+	v.MouseMode = tea.MouseModeCellMotion
+	return v
 }
 func (m model) currentFont() string {
 	if len(m.fonts) == 0 {
@@ -200,8 +205,5 @@ func (m model) currentFont() string {
 
 func BubbleTeaHandler(sess ssh.Session) (tea.Model, []tea.ProgramOption) {
 	m := newModel(sess)
-	return m, []tea.ProgramOption{
-		tea.WithAltScreen(),
-		tea.WithMouseCellMotion(),
-	}
+	return m, nil
 }
