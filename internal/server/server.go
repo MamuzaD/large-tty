@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"log"
+	"os"
 
 	"charm.land/wish/v2"
 	bt "charm.land/wish/v2/bubbletea"
@@ -11,8 +12,13 @@ import (
 )
 
 func Start(ctx context.Context) error {
+	addr := os.Getenv("LARGE_TTY_ADDR")
+	if addr == "" {
+		addr = ":2222"
+	}
+
 	s, err := wish.NewServer(
-		wish.WithAddress(":2222"),
+		wish.WithAddress(addr),
 		wish.WithHostKeyPath(".ssh/id_ed25519"),
 		wish.WithMiddleware(
 			bt.Middleware(tui.BubbleTeaHandler),
@@ -36,3 +42,4 @@ func Start(ctx context.Context) error {
 		return s.Close()
 	}
 }
+
