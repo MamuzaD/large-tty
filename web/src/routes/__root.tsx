@@ -10,6 +10,12 @@ import { NotFound } from '@/components/not-found'
 
 import appCss from '@/styles.css?url'
 
+const SITE_NAME = 'large-tty'
+const SITE_URL = 'https://large-tty.com'
+const DEFAULT_DESCRIPTION =
+  'Show text in large ASCII art -- like large-type.com, on the web.'
+const DEFAULT_OG_IMAGE = `${SITE_URL}/og/landing.jpg`
+
 export const Route = createRootRoute({
   head: () => ({
     meta: [
@@ -21,16 +27,67 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'large-tty',
+        title: SITE_NAME,
       },
       {
         name: 'description',
-        content:
-          'Show text in large ASCII art -- like large-type.com, on the web.',
+        content: DEFAULT_DESCRIPTION,
       },
       {
         name: 'theme-color',
         content: 'rgb(13, 13, 20)',
+      },
+      {
+        property: 'og:title',
+        content: SITE_NAME,
+      },
+      {
+        property: 'og:description',
+        content: DEFAULT_DESCRIPTION,
+      },
+      {
+        property: 'og:type',
+        content: 'website',
+      },
+      {
+        property: 'og:site_name',
+        content: SITE_NAME,
+      },
+      {
+        property: 'og:url',
+        content: SITE_URL,
+      },
+      {
+        property: 'og:image',
+        content: DEFAULT_OG_IMAGE,
+      },
+      {
+        property: 'og:image:width',
+        content: '2400',
+      },
+      {
+        property: 'og:image:height',
+        content: '1260',
+      },
+      {
+        property: 'og:image:alt',
+        content: 'A large-tty terminal-style preview image.',
+      },
+      {
+        name: 'twitter:card',
+        content: 'summary_large_image',
+      },
+      {
+        name: 'twitter:title',
+        content: SITE_NAME,
+      },
+      {
+        name: 'twitter:description',
+        content: DEFAULT_DESCRIPTION,
+      },
+      {
+        name: 'twitter:image',
+        content: DEFAULT_OG_IMAGE,
       },
     ],
     links: [
@@ -63,6 +120,10 @@ export const Route = createRootRoute({
       {
         rel: 'manifest',
         href: '/favicon/site.webmanifest',
+      },
+      {
+        rel: 'canonical',
+        href: SITE_URL,
       },
     ],
   }),
