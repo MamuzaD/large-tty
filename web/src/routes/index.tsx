@@ -48,7 +48,6 @@ function App() {
     <div
       ref={containerRef}
       className="flex h-dvh flex-col overflow-hidden bg-bg text-fg"
-      onClick={() => inputRef.current?.focus()}
     >
       <span
         ref={measureRef}

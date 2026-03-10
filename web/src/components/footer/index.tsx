@@ -19,7 +19,7 @@ export function Footer({
   onClear: () => void
 }) {
   return (
-    <footer className="fixed inset-x-0 bottom-0 z-40 border-t border-border/15 bg-bg/80 backdrop-blur-sm">
+    <footer className="fixed inset-x-0 bottom-0 z-40 border-t border-border/20">
       <FontControls fontLabel={fontLabel} randomPlay={randomPlay} />
       <HelpBar
         onNextFont={onNextFont}

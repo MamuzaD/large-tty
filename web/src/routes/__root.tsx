@@ -5,6 +5,7 @@ import {
   createRootRoute,
 } from '@tanstack/react-router'
 import { Header } from '@/components/header'
+import { SettingsProvider } from '@/hooks/use-settings'
 import { NotFound } from '@/components/not-found'
 
 import appCss from '@/styles.css?url'
@@ -72,10 +73,10 @@ export const Route = createRootRoute({
 
 function RootComponent() {
   return (
-    <>
+    <SettingsProvider>
       <Header />
       <Outlet />
-    </>
+    </SettingsProvider>
   )
 }
 
@@ -83,6 +84,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <head>
+        <script src="/theme-init.js" />
         <HeadContent />
       </head>
       <body className="m-0 overflow-hidden bg-bg text-fg font-mono">

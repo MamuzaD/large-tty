@@ -65,54 +65,48 @@ export function HelpBar({
     return () => window.removeEventListener('keydown', handler, true)
   }, [])
 
-  return (
-    showHelp ? (
-      <div className="px-4 pb-3 pt-2 text-xs">
-        <div className="mx-auto flex w-fit gap-x-8">
-          <div className="grid grid-cols-[auto_auto] gap-x-2 gap-y-0.5">
-            <HelpEntry hotkey="tab" desc="next font" onClick={onNextFont} />
-            <HelpEntry
-              hotkey="shift+tab"
-              desc="prev font"
-              onClick={onPrevFont}
-            />
-            <HelpEntry
-              hotkey="ctrl+r"
-              desc="random font"
-              onClick={onRandomFont}
-            />
-            <HelpEntry
-              hotkey="alt+r"
-              desc="play random"
-              onClick={onToggleRandomPlay}
-            />
-          </div>
-          <div className="grid grid-cols-[auto_auto] gap-x-2 gap-y-0.5">
-            <HelpEntry hotkey="alt+?" desc="help" onClick={toggleHelp} />
-            <HelpEntry hotkey="enter" desc="clear" onClick={onClear} />
-          </div>
+  return showHelp ? (
+    <div className="px-4 pb-3 pt-2 text-xs">
+      <div className="mx-auto flex w-fit gap-x-8">
+        <div className="grid grid-cols-[auto_auto] gap-x-2 gap-y-0.5">
+          <HelpEntry hotkey="tab" desc="next font" onClick={onNextFont} />
+          <HelpEntry hotkey="shift+tab" desc="prev font" onClick={onPrevFont} />
+          <HelpEntry
+            hotkey="ctrl+r"
+            desc="random font"
+            onClick={onRandomFont}
+          />
+          <HelpEntry
+            hotkey="alt+r"
+            desc="play random"
+            onClick={onToggleRandomPlay}
+          />
+        </div>
+        <div className="grid grid-cols-[auto_auto] gap-x-2 gap-y-0.5">
+          <HelpEntry hotkey="alt+?" desc="help" onClick={toggleHelp} />
+          <HelpEntry hotkey="enter" desc="clear" onClick={onClear} />
         </div>
       </div>
-    ) : (
-      <div className="flex items-center justify-center gap-3 px-4 py-1.5 text-xs">
-        <button
-          type="button"
-          onClick={toggleHelp}
-          className="cursor-pointer transition-colors hover:text-fg"
-        >
-          <kbd className="text-accent">alt+?</kbd>{' '}
-          <span className="text-subtle">help</span>
-        </button>
-        <span className="text-faint">&middot;</span>
-        <button
-          type="button"
-          onClick={onClear}
-          className="cursor-pointer transition-colors hover:text-fg"
-        >
-          <kbd className="text-accent">enter</kbd>{' '}
-          <span className="text-subtle">clear</span>
-        </button>
-      </div>
-    )
+    </div>
+  ) : (
+    <div className="flex items-center justify-center gap-3 px-4 py-1.5 text-xs">
+      <button
+        type="button"
+        onClick={toggleHelp}
+        className="cursor-pointer transition-colors hover:text-fg"
+      >
+        <kbd className="text-accent">alt+?</kbd>{' '}
+        <span className="text-subtle">help</span>
+      </button>
+      <span className="text-faint">&middot;</span>
+      <button
+        type="button"
+        onClick={onClear}
+        className="cursor-pointer transition-colors hover:text-fg"
+      >
+        <kbd className="text-accent">enter</kbd>{' '}
+        <span className="text-subtle">clear</span>
+      </button>
+    </div>
   )
 }

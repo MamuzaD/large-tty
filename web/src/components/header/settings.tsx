@@ -1,11 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { IconAdjustments, IconMoon, IconSun } from '@tabler/icons-react'
-import {
-  type MonoFont,
-  MONO_FONTS,
-  type Theme,
-  preloadAllFonts,
-} from '../../hooks/use-settings'
+import { MONO_FONTS, preloadAllFonts } from '../../hooks/use-settings'
+import type { MonoFont, Theme } from '../../hooks/use-settings'
 
 export function SettingsPopup({
   theme,
@@ -56,7 +52,7 @@ export function SettingsPopup({
   }, [open])
 
   return (
-    <div className="relative" onClick={(e) => e.stopPropagation()}>
+    <div className="relative">
       <button
         ref={btnRef}
         type="button"

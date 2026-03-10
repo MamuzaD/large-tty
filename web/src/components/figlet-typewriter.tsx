@@ -25,29 +25,36 @@ export function FigletTypewriter({
   const { columns, measureRef } = useMonospaceColumns({ containerRef })
   const [charCount, setCharCount] = useState(0)
   const onCompleteRef = useRef(onComplete)
-  onCompleteRef.current = onComplete
+
+  useEffect(() => {
+    onCompleteRef.current = onComplete
+  }, [onComplete])
 
   const reduceMotion = useMemo(
     () =>
       typeof window !== 'undefined' &&
-      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches,
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches,
     [],
   )
 
   useEffect(() => {
     const len = message.length
-    setCharCount(reduceMotion ? len : 0)
     if (reduceMotion) {
       onCompleteRef.current?.()
       return
     }
     let i = 0
     let last = 0
+    let reset = false
     let raf: number
     const step = (time: number) => {
+      if (!reset) {
+        setCharCount(0)
+        reset = true
+      }
       if (!last) last = time
       if (time - last >= letterMs) {
-        i++
+        i = i + 1
         setCharCount(i)
         last = time
       }
@@ -62,10 +69,11 @@ export function FigletTypewriter({
   }, [message, letterMs, reduceMotion])
 
   const figText = useMemo(() => {
-    const partial = message.slice(0, charCount)
+    const visibleCount = reduceMotion ? message.length : charCount
+    const partial = message.slice(0, visibleCount)
     if (!partial) return ''
     return wrapFiglet(partial, font, columns).text
-  }, [charCount, columns, font, message])
+  }, [charCount, columns, font, message, reduceMotion])
 
   const content = (
     <>

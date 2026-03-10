@@ -137,8 +137,7 @@ const fontLoaders: Partial<Record<string, FontLoader>> = {
   Small: async () => ({ default: SmallFont }),
   'Small Isometric1': () =>
     import('figlet/importable-fonts/Small Isometric1.js'),
-  'Small Keyboard': () =>
-    import('figlet/importable-fonts/Small Keyboard.js'),
+  'Small Keyboard': () => import('figlet/importable-fonts/Small Keyboard.js'),
   'Small Script': () => import('figlet/importable-fonts/Small Script.js'),
   'Small Shadow': () => import('figlet/importable-fonts/Small Shadow.js'),
   'Small Slant': () => import('figlet/importable-fonts/Small Slant.js'),
@@ -267,8 +266,7 @@ function findMaxFit(
 }
 
 function findMaxRuneFit(chars: string[], font: string, maxW: number): number {
-  if (maxLineWidth(renderFig(chars.join(''), font)) <= maxW)
-    return chars.length
+  if (maxLineWidth(renderFig(chars.join(''), font)) <= maxW) return chars.length
 
   let lo = 1
   let hi = chars.length

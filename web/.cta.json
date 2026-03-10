@@ -11,11 +11,5 @@
   "routerOnly": false,
   "version": 1,
   "framework": "react",
-  "chosenAddOns": [
-    "eslint",
-    "nitro",
-    "compiler",
-    "posthog",
-    "shadcn"
-  ]
+  "chosenAddOns": ["eslint", "nitro", "compiler"]
 }

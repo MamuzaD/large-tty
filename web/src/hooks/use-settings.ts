@@ -1,4 +1,13 @@
-import { useCallback, useEffect, useState } from 'react'
+import {
+  createElement,
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
+import type { ReactNode } from 'react'
 
 export type Theme = 'dark' | 'light'
 
@@ -25,6 +34,16 @@ interface Settings {
 }
 
 const DEFAULT_SETTINGS: Settings = { theme: 'dark', monoFont: 'JetBrains Mono' }
+interface SettingsContextValue {
+  theme: Theme
+  monoFont: MonoFont
+  setTheme: (theme: Theme) => void
+  setMonoFont: (monoFont: MonoFont) => void
+}
+
+const SettingsContext = createContext<SettingsContextValue | undefined>(
+  undefined,
+)
 
 function load(): Settings {
   if (typeof window === 'undefined') return DEFAULT_SETTINGS
@@ -34,9 +53,10 @@ function load(): Settings {
     if (raw) {
       const parsed = JSON.parse(raw)
       return {
-        theme: parsed.theme === 'light' || parsed.theme === 'dark'
-          ? parsed.theme
-          : 'dark',
+        theme:
+          parsed.theme === 'light' || parsed.theme === 'dark'
+            ? parsed.theme
+            : 'dark',
         monoFont: (MONO_FONTS as readonly string[]).includes(parsed.monoFont)
           ? (parsed.monoFont as MonoFont)
           : 'JetBrains Mono',
@@ -89,6 +109,13 @@ function applyMonoFont(font: MonoFont) {
 }
 
 export function useSettings() {
+  const context = useContext(SettingsContext)
+  if (!context)
+    throw new Error('useSettings must be used within SettingsProvider')
+  return context
+}
+
+export function SettingsProvider({ children }: { children: ReactNode }) {
   const [settings, setSettings] = useState<Settings>(load)
 
   useEffect(() => {
@@ -114,10 +141,15 @@ export function useSettings() {
     })
   }, [])
 
-  return {
-    theme: settings.theme,
-    monoFont: settings.monoFont,
-    setTheme,
-    setMonoFont,
-  }
+  const value = useMemo(
+    () => ({
+      theme: settings.theme,
+      monoFont: settings.monoFont,
+      setTheme,
+      setMonoFont,
+    }),
+    [settings.theme, settings.monoFont, setTheme, setMonoFont],
+  )
+
+  return createElement(SettingsContext.Provider, { value }, children)
 }

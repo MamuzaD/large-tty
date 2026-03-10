@@ -40,18 +40,18 @@ export function TryItCta() {
           ))}
         </div>
         <div className="relative px-5 py-4 text-center">
-          <pre className="text-sm text-brand-1 select-all">
-            {VALUES[tab]}
-          </pre>
+          <pre className="text-sm text-brand-1 select-all">{VALUES[tab]}</pre>
           <button
             type="button"
             onClick={copy}
             className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer rounded p-1.5 text-faint transition-colors hover:bg-fg/5 hover:text-subtle"
             aria-label="Copy to clipboard"
           >
-            {copied
-              ? <IconCheck size={14} stroke={1.5} className="text-brand-1" />
-              : <IconCopy size={14} stroke={1.5} />}
+            {copied ? (
+              <IconCheck size={14} stroke={1.5} className="text-brand-1" />
+            ) : (
+              <IconCopy size={14} stroke={1.5} />
+            )}
           </button>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import type { RefObject } from 'react'
 import { isASCII } from '@/lib/figlet-renderer'
 
@@ -15,10 +15,7 @@ export function AsciiInput({
 }) {
   const [asciiError, setAsciiError] = useState<string | null>(null)
   const remaining = charLimit - value.length
-
-  useEffect(() => {
-    if (!value) setAsciiError(null)
-  }, [value])
+  const visibleError = value ? asciiError : null
 
   let borderClass = 'border-border'
   if (remaining <= 0) borderClass = 'border-red-500'
@@ -49,14 +46,14 @@ export function AsciiInput({
             maxLength={charLimit}
             spellCheck={false}
             autoComplete="off"
-            aria-describedby={asciiError ? 'ascii-error' : undefined}
+            aria-describedby={visibleError ? 'ascii-error' : undefined}
             className="min-w-0 flex-1 border-none bg-transparent text-sm text-fg outline-none placeholder:text-placeholder"
           />
         </div>
         {/* error */}
-        {asciiError && (
+        {visibleError && (
           <div id="ascii-error" className="pt-1 text-xs text-orange-400">
-            {asciiError}
+            {visibleError}
           </div>
         )}
       </div>
