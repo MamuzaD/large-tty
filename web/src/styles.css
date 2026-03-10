@@ -6,10 +6,28 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme inline {
+@theme {
   --font-mono:
     'JetBrains Mono', ui-monospace, 'Cascadia Code', 'Fira Code', Menlo,
     Consolas, monospace;
+
+  --color-bg: #fafafa;
+  --color-fg: #1a1a2e;
+  --color-accent: #e5325b;
+  --color-primary: #c43868;
+  --color-subtle: #71717a;
+  --color-faint: #a1a1aa;
+  --color-placeholder: #a0a0b0;
+  --color-border: #6366f1;
+  --color-brand-1: #0d9488;
+  --color-brand-2: #14b8a6;
+}
+
+:root {
+  --selection: rgba(229, 50, 91, 0.15);
+}
+
+.dark {
   --color-bg: #0d0d14;
   --color-fg: #e0e0e0;
   --color-accent: #ff5f87;
@@ -20,18 +38,6 @@
   --color-border: #5f5fff;
   --color-brand-1: #56c6be;
   --color-brand-2: #7ed3bf;
-
-  /* Starter template tokens used by Header/Footer/About/ThemeToggle */
-  --color-line: color-mix(in srgb, var(--color-fg), transparent 85%);
-  --color-header-bg: color-mix(in srgb, var(--color-bg), transparent 25%);
-  --color-chip-line: color-mix(in srgb, var(--color-fg), transparent 70%);
-  --color-chip-bg: color-mix(in srgb, var(--color-bg), transparent 10%);
-  --color-sea-ink: var(--color-fg);
-  --color-sea-ink-soft: var(--color-subtle);
-  --color-link-bg-hover: color-mix(in srgb, var(--color-fg), transparent 92%);
-}
-
-:root {
   --selection: rgba(255, 95, 135, 0.3);
 }
 
