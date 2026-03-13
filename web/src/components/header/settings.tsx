@@ -60,7 +60,7 @@ export function SettingsPopup({
         className={`cursor-pointer rounded-md border p-1.5 transition-colors ${
           open
             ? 'border-border/60 text-accent'
-            : 'border-transparent text-faint hover:text-subtle'
+            : 'border-transparent text-faint hover:text-subtle hover:bg-fg/10'
         }`}
         title="Settings"
         aria-label="Settings"
