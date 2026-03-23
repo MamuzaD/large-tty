@@ -14,7 +14,7 @@ Inspired by [large-type.com](https://large-type.com).
 
 ## Demo
 
-https://github.com/user-attachments/assets/115bb2b4-9178-444d-9f80-8819ffc072aa
+https://github.com/user-attachments/assets/ba2604ef-32d2-4ce6-aa2a-1b6a44e60f29
 
 ### Built With
 
